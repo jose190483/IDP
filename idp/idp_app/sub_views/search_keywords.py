@@ -3,6 +3,7 @@ import re
 import fitz  # PyMuPDF
 from collections import defaultdict
 from django.shortcuts import render
+from collections import Counter
 
 PDF_FOLDER = r"C:\Users\waltjos01\PycharmProjects\IDP_v3.0\idp\idp_app\pdfs"
 
@@ -67,6 +68,9 @@ def search_keywords(request):
     num_not_found = len(not_found_keywords)
     request.session['keywords'] = keywords
     request.session['found_summary'] = dict(highlighted_results)
+
+    duplicate_keywords_list = {k: v for k, v in Counter(keywords).items() if v > 1}
+    duplicate_keywords=len(duplicate_keywords_list)
     return render(request, 'idp_app/search_page.html', {
         'stats': {
             'pdfs_scanned': num_pdfs,
@@ -75,6 +79,7 @@ def search_keywords(request):
             'keywords_not_found': num_not_found,
             'duplicate_keywords': duplicate_keywords,
         },
+        'duplicate_keywords_list': duplicate_keywords_list,
         'found_summary': dict(highlighted_results),
         'not_found_keywords': not_found_keywords,
         'message': message,
