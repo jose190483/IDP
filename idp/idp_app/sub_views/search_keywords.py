@@ -47,22 +47,23 @@ def search_keywords(request):
                 doc = fitz.open(pdf_path)
 
                 for page_num, page in enumerate(doc, start=1):
-                    text = page.get_text()
-                    text_lower = text.lower()
+
+                    blocks = page.get_text('blocks') or []
+                    text = ' '.join(block[4] for block in blocks if isinstance(block[4], str))
+                    text_normalized = re.sub(r'\s+', ' ', text).lower()
 
                     for kw in keywords:
-                        if kw in text_lower:
-                            # Highlight match
+                        if kw in text_normalized:
                             pattern = re.compile(re.escape(kw), re.IGNORECASE)
                             highlighted_text = pattern.sub(r'<mark>\g<0></mark>', text)
-                            highlighted_results[kw].append(
-                                (pdf_name, page_num, highlighted_text)
-                            )
+                            highlighted_results[kw].append((pdf_name, page_num, highlighted_text))
 
             not_found_keywords = [kw for kw in keywords if not highlighted_results[kw]]
     num_pdfs = len([f for f in os.listdir(PDF_FOLDER) if f.endswith('.pdf')])
     num_keywords = len(keywords)
     num_matched = len([kw for kw in highlighted_results if highlighted_results[kw]])
+    unique_keywords = len(set(keywords))
+    duplicate_keywords = num_keywords - unique_keywords
     num_not_found = len(not_found_keywords)
     request.session['keywords'] = keywords
     request.session['found_summary'] = dict(highlighted_results)
@@ -72,6 +73,7 @@ def search_keywords(request):
             'keywords_entered': num_keywords,
             'keywords_matched': num_matched,
             'keywords_not_found': num_not_found,
+            'duplicate_keywords': duplicate_keywords,
         },
         'found_summary': dict(highlighted_results),
         'not_found_keywords': not_found_keywords,

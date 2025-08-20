@@ -1,0 +1,3 @@
+def createembeddings(text):
+    try:
+        

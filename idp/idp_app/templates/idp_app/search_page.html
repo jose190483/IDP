@@ -57,9 +57,32 @@
                 </div>
             </div>
         </div>
-
         <!-- Right Column (70%) -->
         <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Summary</h5>
+                </div>
+                <div class="card-body">
+                {% if stats %}
+                {% if found_summary %}
+                <div class="">
+                    <a href="{% url 'export_csv' %}" class="btn btn-primary">📥 Download CSV</a>
+                </div>
+                {% endif %}
+                <div class="mt-3">
+                    <ul class="list-group">
+                        <li class="list-group-item">📁 PDFs Scanned: <strong>{{ stats.pdfs_scanned }}</strong></li>
+                        <li class="list-group-item">📝 Keywords Entered: <strong>{{ stats.keywords_entered }}</strong></li>
+                        <li class="list-group-item">✅ Keywords Matched: <strong>{{ stats.keywords_matched }}</strong></li>
+                        <li class="list-group-item">❌ Keywords Not Found: <strong>{{ stats.keywords_not_found }}</strong></li>
+                        <li class="list-group-item">🚫 Duplicate keyword: <strong>{{ stats.duplicate_keywords }}</strong></li>
+                    </ul>
+                </div>
+                {% endif %}
+                </div>
+            </div>
+            <br>
             <div class="card shadow-sm">
                 <div class="card-header bg-warning text-white">
                     <h5 class="mb-0">Search Results</h5>
@@ -95,23 +118,6 @@
                     </table>
                     {% endif %}
                     {% if found_summary %}
-                    {% if stats %}
-                    {% if found_summary %}
-                    <div class="mt-3">
-                        <a href="{% url 'export_csv' %}" class="btn btn-primary">📥 Download CSV</a>
-                    </div>
-                    {% endif %}
-                    <div class="mt-3">
-                        <h5>📊 Summary:</h5>
-                        <ul class="list-group">
-                            <li class="list-group-item">📁 PDFs Scanned: <strong>{{ stats.pdfs_scanned }}</strong></li>
-                            <li class="list-group-item">📝 Keywords Entered: <strong>{{ stats.keywords_entered }}</strong></li>
-                            <li class="list-group-item">✅ Keywords Matched: <strong>{{ stats.keywords_matched }}</strong></li>
-                            <li class="list-group-item">❌ Keywords Not Found: <strong>{{ stats.keywords_not_found }}</strong></li>
-                        </ul>
-                    </div>
-                    {% endif %}
-
                     <div class="mt-4">
                         <h5>🔍 Matched Page Text:</h5>
                         {% for kw, matches in found_summary.items %}
