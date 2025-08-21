@@ -32,7 +32,7 @@ def manage_pdfs(request):
             message = f"{deleted_count} selected PDF(s) deleted successfully."
 
     pdf_files = [f for f in os.listdir(PDF_FOLDER) if f.endswith('.pdf')]
-    return render(request, 'idp_app/manage_pdfs.html', {
+    return render(request, 'epe_app/manage_pdfs.html', {
         'message': message,
         'pdf_files': pdf_files
     })

@@ -1,0 +1,33 @@
+.scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 1rem;
+            padding: 1rem;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+        }
+        .scroll-container::-webkit-scrollbar {
+            display: none;
+        }
+        .scroll-card {
+            flex-shrink: 0;
+            min-width: 300px;
+            max-width: 90vw;
+            scroll-snap-align: start;
+        }
+        .scroll-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+                .scrollable-table {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #343a40;
+            color: white;
+            z-index: 1;
+        }
